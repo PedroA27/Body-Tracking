@@ -24,7 +24,7 @@ class MeasuresDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATAB
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
-        val createTableQuery = "CREATE TABLE $TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY, $COLUMN_UPPER_WAIST NUMERIC, $COLUMN_MID_WAIST NUMERIC, $COLUMN_LOWER_WAIST NUMERIC, $COLUMN_NECK NUMERIC, $COLUMN_DATE DATE NOT NULL UNIQUE)"
+        val createTableQuery = "CREATE TABLE $TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY, $COLUMN_UPPER_WAIST NUMERIC, $COLUMN_MID_WAIST NUMERIC, $COLUMN_LOWER_WAIST NUMERIC, $COLUMN_NECK NUMERIC, $COLUMN_DATE TEXT NOT NULL UNIQUE)"
         db?.execSQL(createTableQuery)
     }
 
@@ -33,10 +33,10 @@ class MeasuresDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATAB
         db?.execSQL(dropTableQuery)
         onCreate(db)
     }
-    fun insertMeasures(measures: AppMeasures) {
+    fun insertAppMeasures(measures: AppMeasures) {
         val db = writableDatabase
         val values = ContentValues().apply{
-            put(COLUMN_DATE, measures.date.time) //Convert date to long
+            put(COLUMN_DATE, measures.date) //Convert date to long
             put(COLUMN_NECK, measures.neck)
             put(COLUMN_LOWER_WAIST, measures.lowerWaist)
             put(COLUMN_MID_WAIST, measures.midWaist)

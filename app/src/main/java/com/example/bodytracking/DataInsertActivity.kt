@@ -30,6 +30,18 @@ class DataInsertActivity : AppCompatActivity() {
             startActivity(intent)
 //            Toast.makeText(this, "Aoba", Toast.LENGTH_SHORT).show()
         }
+        val db = MeasuresDatabaseHelper(this)
+        binding.buttonPanel.setOnClickListener{
+            val weight = binding.insertWeight.toString().toFloat()
+            val upperWaist = binding.insertUpperWaist.toString().toFloat()
+            val midWaist = binding.insertMidWaist.toString().toFloat()
+            val lowerWaist = binding.insertLowerWaist.toString().toFloat()
+            val neck = binding.insertNeck.toString().toFloat()
+            val date = binding.insertDate.toString()
+            val appMeasures = AppMeasures(0,weight,upperWaist,midWaist,lowerWaist,neck,date)
+            db.insertAppMeasures(appMeasures)
+            finish()
+        }
 
 
     }
