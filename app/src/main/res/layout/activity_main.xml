@@ -58,7 +58,7 @@
         android:layout_width="match_parent"
         android:layout_marginEnd="150dp"
         android:layout_marginStart="150dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="28dp"
         android:background="@drawable/bg_circle"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintTop_toBottomOf="@id/toolbarLayout"
@@ -86,20 +86,22 @@
         app:layout_constraintTop_toBottomOf="@id/circle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="14dp"/>
 
     <ImageView
         android:id="@+id/leftCard"
-        android:layout_height="90dp"
         android:layout_width="0dp"
-        android:background="@drawable/bg_left_card"
-        android:layout_marginEnd="10dp"
+        android:layout_height="90dp"
         android:layout_marginStart="15dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/bg_left_card"
+        app:layout_constraintBottom_toTopOf="@id/graphic"
+        app:layout_constraintEnd_toEndOf="@id/guideline"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/guideline"
-        app:layout_constraintTop_toBottomOf="@id/averageWeight"
-        app:layout_constraintBottom_toTopOf="@id/buttonEnterData"
-        />
+        app:layout_constraintTop_toBottomOf="@id/averageWeight" />
+
     <ImageView
         android:id="@+id/left_card_text_bg"
         android:layout_height="25dp"
@@ -111,6 +113,8 @@
         app:layout_constraintEnd_toEndOf="@id/leftCard"
         app:layout_constraintTop_toTopOf="@id/leftCard"
         android:background="@drawable/bg_card_title" />
+
+
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
@@ -137,20 +141,20 @@
         app:layout_constraintBottom_toBottomOf="@id/leftCard" />
 
 
-
-
     <ImageView
         android:id="@+id/rightCard"
-        android:layout_height="90dp"
         android:layout_width="0dp"
-        android:background="@drawable/bg_right_card"
+        android:layout_height="90dp"
+        android:layout_marginStart="7dp"
         android:layout_marginEnd="15dp"
-        android:layout_marginStart="10dp"
-        app:layout_constraintStart_toStartOf="@id/guideline"
+        android:background="@drawable/bg_right_card"
+        app:layout_constraintBottom_toBottomOf="@id/leftCard"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/averageWeight"
-        app:layout_constraintBottom_toTopOf="@id/buttonEnterData"
-        />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@id/leftCard"
+         />
+
     <ImageView
         android:id="@+id/right_card_text_bg"
         android:layout_height="25dp"
@@ -198,8 +202,27 @@
         android:textColor="@color/white"
 
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="28dp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/bg_button_gradient"
+
+        >
+
+    </androidx.appcompat.widget.AppCompatButton>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonDB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/palanquin_bold"
+        android:text="DB"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+
+        app:layout_constraintBottom_toBottomOf="@+id/buttonEnterData"
+        app:layout_constraintTop_toTopOf="@+id/buttonEnterData"
+        app:layout_constraintStart_toEndOf="@+id/buttonEnterData"
         app:layout_constraintEnd_toEndOf="parent"
         android:background="@drawable/bg_button_gradient"
 

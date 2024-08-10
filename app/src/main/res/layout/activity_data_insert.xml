@@ -469,7 +469,7 @@
         android:layout_marginEnd="20dp"
         android:textSize="18sp"
         android:background="@android:color/transparent"
-        android:inputType="date"
+        android:inputType="none"
         android:fontFamily="@font/palanquin_medium"
         android:gravity="center"
         android:hint="Ex: 25/12/2010"
