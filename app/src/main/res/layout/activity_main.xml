@@ -114,7 +114,19 @@
         app:layout_constraintTop_toTopOf="@id/leftCard"
         android:background="@drawable/bg_card_title" />
 
-
+    <ImageView
+        android:id="@+id/graphic"
+        android:layout_height="0dp"
+        android:layout_width= "match_parent"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="28dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/buttonEnterData"
+        app:layout_constraintTop_toBottomOf="@id/leftCard"
+        android:background="@drawable/bg_card_title" />
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
