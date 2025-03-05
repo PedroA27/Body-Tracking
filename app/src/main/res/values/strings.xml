@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Body Tracking</string>
+    <string name="title_activity_view_measures">ViewMeasuresActivity</string>
 </resources>

@@ -11,6 +11,7 @@ import com.example.bodytracking.databinding.ActivityDataInsertBinding
 import java.util.Calendar
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Handler
 import android.os.Looper
 import android.view.inputmethod.InputMethodManager
@@ -18,13 +19,13 @@ class DataInsertActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDataInsertBinding
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDataInsertBinding.inflate(layoutInflater)
         enableEdgeToEdge()
-//        setContentView(R.layout.activity_main)
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
@@ -33,41 +34,7 @@ class DataInsertActivity : AppCompatActivity() {
         binding.icReturn.setOnClickListener {
             val intent = Intent(this,MainActivity::class.java)
             startActivity(intent)
-//            Toast.makeText(this, "Aoba", Toast.LENGTH_SHORT).show()
         }
-
-//        binding.insertDate.setOnClickListener {
-//            hideKeyboard()
-//            showDatePickerDialog()
-//        }
-
-//        binding.insertDate.setOnTouchListener() { v, event ->
-//            if (event.action == android.view.MotionEvent.ACTION_UP) {
-//                v.performClick() // Garante que o click seja registrado
-//            }
-//            true // Consume o evento de toque para impedir o teclado
-//        }
-//        binding.insertDate.inputType = android.text.InputType.TYPE_NULL
-//
-//        binding.insertDate.apply {
-//            isFocusable = false
-//            isFocusableInTouchMode = false
-//            inputType = android.text.InputType.TYPE_NULL
-//
-//            setOnClickListener {
-//                hideKeyboard()
-//                Handler(Looper.getMainLooper()).postDelayed({
-//                    showDatePickerDialog()
-//                }, 50)
-//            }
-//
-//            setOnTouchListener { v, event ->
-//                if (event.action == android.view.MotionEvent.ACTION_UP) {
-//                    v.performClick()
-//                }
-//                true
-//            }
-//        }
         binding.insertDate.apply {
             isFocusable = false
             isFocusableInTouchMode = false
@@ -106,20 +73,20 @@ class DataInsertActivity : AppCompatActivity() {
             if (weight != null && upperWaist != null && midWaist != null && lowerWaist != null && neck != null && date.isNotEmpty()) {
                 if(exists){
                     MeasuresDatabaseHelper.updateMeasure(db,upperWaist, midWaist, weight, date, neck, lowerWaist)
-                    Toast.makeText(this, "Operação Concluída", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Operation Concluded", Toast.LENGTH_SHORT).show()
 
                 }
                 else {
                     val appMeasures =
                         AppMeasures(0, weight, upperWaist, midWaist, lowerWaist, neck, date)
                     dbHelper.insertAppMeasures(appMeasures)
-                    Toast.makeText(this, "Operação Concluída", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Operation Concluded", Toast.LENGTH_SHORT).show()
 
                 }
-                finish()
+                finish()// Close activity
             }
             else{
-                Toast.makeText(this, "Por favor, insira todos os valores corretamente.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please, insert all values correctly.", Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -134,9 +101,10 @@ class DataInsertActivity : AppCompatActivity() {
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
+        
 
         val datePickerDialog = DatePickerDialog(
-            this,
+            this,R.style.CustomDatePickerTheme,
             { _, selectedYear, selectedMonth, selectedDay ->
                 val selectedDate = "$selectedDay/${selectedMonth + 1}/$selectedYear"
                 binding.insertDate.setText(selectedDate)
@@ -148,7 +116,7 @@ class DataInsertActivity : AppCompatActivity() {
     }
     private fun hideKeyboard() {
         val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        // Substituir currentFocus por binding.root ou null
+        // Hide Keyboard when putting Date
         val view = currentFocus ?: binding.root
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }

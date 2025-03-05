@@ -6,6 +6,7 @@
         android:endColor="#804CC9F0"
         android:angle="315"/>
     <stroke
-        android:color="#F72585"
+        android:color="#BFF72585"
         android:width="5dp"/>
+
 </shape>

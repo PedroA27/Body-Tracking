@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="CustomDatePickerTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">#663A0CA3</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
+
+        <item name="android:textColorSecondary">#FFFFFF</item>
+        <item name="android:fontFamily">@font/palanquin_bold</item>
+        <item name="android:weekDayTextAppearance">@style/CustomWeekDayTextAppearance</item>
+        <item name="android:dayOfWeekTextAppearance">@style/CustomWeekDayTextAppearance</item>
+        <item name="android:windowBackground">@drawable/bg_date_picker</item>
+        <item name="android:selectedWeekBackgroundColor">@drawable/bg_date_picker_header</item>
+        <item name="android:datePickerMode">calendar</item>
+    </style>
+    <style name="CustomWeekDayTextAppearance" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:fontFamily">@font/palanquin_bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+
+
+</resources>

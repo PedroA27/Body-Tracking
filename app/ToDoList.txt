@@ -1,0 +1,4 @@
+- Refresh graphic instantly
+- Configure X axis
+- Remove DB button
+- Configure Calendar pop up
