@@ -26,7 +26,18 @@
             android:background="@drawable/bg_toolbar_gradient"
             >
 
-
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline25"
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.25" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline75"
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.75" />
             <!--            Definindo toolbar-->
             <Toolbar
                 android:id="@+id/toolbar"
@@ -42,16 +53,26 @@
                 />
             <ImageView
                 android:id="@+id/circleUser"
-                android:layout_height="50dp"
-                android:layout_width="50dp"
+                android:layout_height="45dp"
+                android:layout_width="45dp"
 
-                android:layout_marginEnd="20dp"
 
                 android:background="@drawable/bg_circle"
                 app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="@+id/guideline75"
                 app:layout_constraintTop_toTopOf="@+id/toolbar"
                 app:layout_constraintBottom_toBottomOf="@+id/toolbar"
                 app:layout_constraintEnd_toEndOf="parent" />
+
+            <ImageView
+                android:id="@+id/config"
+                android:layout_height="32dp"
+                android:layout_width="32dp"
+                android:background="@drawable/config"
+                app:layout_constraintTop_toTopOf="@+id/toolbar"
+                app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+                app:layout_constraintEnd_toEndOf="@id/guideline25"
+                app:layout_constraintStart_toStartOf="parent" />
 
 
 
