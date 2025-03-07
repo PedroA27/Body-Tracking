@@ -21,17 +21,22 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="70dp"
+            android:minHeight="80dp"
             android:background="@drawable/bg_toolbar_gradient"
             >
 
-
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline30"
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.30" />
 <!--            Definindo toolbar-->
             <Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="70dp"
+                android:minHeight="80dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -60,8 +65,8 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_return"
                 app:layout_constraintTop_toTopOf="@id/toolbar"
-                app:layout_constraintStart_toStartOf="@id/toolbar"
-                app:layout_constraintEnd_toStartOf="@id/centerText"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/guideline30"
                 app:layout_constraintBottom_toBottomOf="@id/toolbar"
                 />
 

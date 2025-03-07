@@ -109,6 +109,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
 
         }
+        binding.config.setOnClickListener {
+            val intent = Intent(this,ConfigActivity::class.java)
+            startActivity(intent)
+
+        }
 
 
     }
