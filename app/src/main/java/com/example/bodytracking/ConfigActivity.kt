@@ -1,9 +1,13 @@
 package com.example.bodytracking
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
+import android.widget.Button
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -11,9 +15,15 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.bodytracking.databinding.ActivityConfigBinding
 import com.example.bodytracking.databinding.ActivityDataInsertBinding
+import com.example.bodytracking.databinding.CustomImageBoxBinding
 
 class ConfigActivity : AppCompatActivity() {
     private lateinit var binding: ActivityConfigBinding
+    private lateinit var binding2: CustomImageBoxBinding
+    lateinit var dialog: Dialog
+//    lateinit var btnReturn: Button
+//    lateinit var btnChangeFile: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityConfigBinding.inflate(layoutInflater)
@@ -37,5 +47,24 @@ class ConfigActivity : AppCompatActivity() {
             val intent = Intent(this,MainActivity::class.java)
             startActivity(intent)
         }
+
+        dialog = Dialog(this)
+        dialog.setContentView(R.layout.custom_image_box)
+        dialog.window?.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.window?.setBackgroundDrawable(getDrawable(R.drawable.bg_dialog_box))
+
+        binding.circle.setOnClickListener {
+            dialog.show()
+        }
+
+//        btnReturn = dialog.findViewById(R.id.btnReturn)
+//        btnChangeFile = dialog.findViewById(R.id.ChangeButton)
+//        binding2.btnReturn.setOnClickListener {
+//            dialog.dismiss()
+//        }
+//         binding2.ChangeButton.setOnClickListener{
+//            Toast.makeText(this, "LOL", Toast.LENGTH_SHORT).show()
+//        }
+
     }
 }

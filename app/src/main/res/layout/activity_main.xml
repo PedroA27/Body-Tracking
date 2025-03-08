@@ -123,6 +123,7 @@
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintTop_toBottomOf="@id/toolbarLayout"
         app:layout_constraintEnd_toEndOf="parent"
+
         app:layout_constraintStart_toStartOf="parent"/>
     <TextView
         android:id="@+id/averageWeight"
@@ -314,7 +315,6 @@
         android:text="WEEK"
         android:textSize="15sp"
         android:textColor="@color/white"
-
         app:layout_constraintBottom_toTopOf="@+id/buttonEnterData"
         app:layout_constraintTop_toBottomOf="@+id/graphic"
         app:layout_constraintStart_toStartOf="@+id/graphic"
