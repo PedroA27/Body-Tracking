@@ -3,6 +3,8 @@ package com.example.bodytracking
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.util.TypedValue
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
@@ -19,7 +21,7 @@ import com.example.bodytracking.databinding.CustomImageBoxBinding
 
 class ConfigActivity : AppCompatActivity() {
     private lateinit var binding: ActivityConfigBinding
-    private lateinit var binding2: CustomImageBoxBinding
+    private lateinit var dialogBinding: CustomImageBoxBinding
     lateinit var dialog: Dialog
 //    lateinit var btnReturn: Button
 //    lateinit var btnChangeFile: Button
@@ -27,6 +29,7 @@ class ConfigActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityConfigBinding.inflate(layoutInflater)
+//        binding2 = CustomImageBoxBinding.inflate(layoutInflater)
         enableEdgeToEdge()
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
@@ -49,22 +52,27 @@ class ConfigActivity : AppCompatActivity() {
         }
 
         dialog = Dialog(this)
-        dialog.setContentView(R.layout.custom_image_box)
-        dialog.window?.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialogBinding = CustomImageBoxBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+//        dialog.window?.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT)
+        val width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 300f, resources.displayMetrics).toInt()
+        val height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 400f, resources.displayMetrics).toInt()
+        dialog.window?.setLayout(height,width)
         dialog.window?.setBackgroundDrawable(getDrawable(R.drawable.bg_dialog_box))
 
         binding.circle.setOnClickListener {
             dialog.show()
         }
 
-//        btnReturn = dialog.findViewById(R.id.btnReturn)
-//        btnChangeFile = dialog.findViewById(R.id.ChangeButton)
-//        binding2.btnReturn.setOnClickListener {
-//            dialog.dismiss()
-//        }
-//         binding2.ChangeButton.setOnClickListener{
-//            Toast.makeText(this, "LOL", Toast.LENGTH_SHORT).show()
-//        }
+
+        dialogBinding.btnReturn.setOnClickListener{
+            Log.d("DEBUG", "btnReturn clicado!")
+            dialog.dismiss()
+        }
+        dialogBinding.changeButton.setOnClickListener{
+            Toast.makeText(this, "LOL", Toast.LENGTH_SHORT).show()
+        }
 
     }
+
 }

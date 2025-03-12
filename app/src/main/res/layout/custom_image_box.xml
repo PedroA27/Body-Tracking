@@ -6,7 +6,7 @@
     app:cardCornerRadius="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:background="@drawable/bg_app">
         <androidx.constraintlayout.widget.Guideline
@@ -40,10 +40,10 @@
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/yourImageText"
-            app:layout_constraintBottom_toTopOf="@+id/ChangeButton"
+            app:layout_constraintBottom_toTopOf="@+id/changeButton"
             app:layout_constraintEnd_toEndOf="parent" />
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/ChangeButton"
+            android:id="@+id/changeButton"
             android:layout_width="0dp"
             android:layout_height="30dp"
             android:fontFamily="@font/palanquin_bold"
