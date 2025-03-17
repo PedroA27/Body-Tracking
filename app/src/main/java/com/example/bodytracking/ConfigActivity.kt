@@ -31,9 +31,16 @@ class ConfigActivity : AppCompatActivity() {
 
 
 
-    companion object {
-        val IMAGE_REQUEST_CODE = 1_000;
-    }
+
+    //-------------
+    private val imagePickerLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val data: Intent? = result.data
+                dialogBinding.circleUser.setImageURI(data?.data)
+            }
+        }
+    //-------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityConfigBinding.inflate(layoutInflater)
@@ -87,16 +94,11 @@ class ConfigActivity : AppCompatActivity() {
     }
 
 
+
     private fun pickImageFromGallery() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
-        startActivityForResult(intent, IMAGE_REQUEST_CODE)
-    }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK) {
-            dialogBinding.circleUser.setImageURI(data?.data)
-        }
+        imagePickerLauncher.launch(intent)
     }
 
 }
