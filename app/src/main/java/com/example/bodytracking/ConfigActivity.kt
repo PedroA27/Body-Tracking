@@ -2,34 +2,42 @@ package com.example.bodytracking
 
 import android.app.Dialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
-import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
-import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.bodytracking.databinding.ActivityConfigBinding
-import com.example.bodytracking.databinding.ActivityDataInsertBinding
 import com.example.bodytracking.databinding.CustomImageBoxBinding
+import java.io.File
 
 class ConfigActivity : AppCompatActivity() {
     private lateinit var binding: ActivityConfigBinding
     private lateinit var dialogBinding: CustomImageBoxBinding
     lateinit var dialog: Dialog
-//    lateinit var btnReturn: Button
-//    lateinit var btnChangeFile: Button
 
+    private lateinit var captureIV: ImageView
+    private lateinit var imageUri: Uri
+
+
+
+    companion object {
+        val IMAGE_REQUEST_CODE = 1_000;
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityConfigBinding.inflate(layoutInflater)
-//        binding2 = CustomImageBoxBinding.inflate(layoutInflater)
+
         enableEdgeToEdge()
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
@@ -54,25 +62,41 @@ class ConfigActivity : AppCompatActivity() {
         dialog = Dialog(this)
         dialogBinding = CustomImageBoxBinding.inflate(layoutInflater)
         dialog.setContentView(dialogBinding.root)
-//        dialog.window?.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT)
+
         val width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 300f, resources.displayMetrics).toInt()
         val height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 400f, resources.displayMetrics).toInt()
         dialog.window?.setLayout(height,width)
         dialog.window?.setBackgroundDrawable(getDrawable(R.drawable.bg_dialog_box))
 
+
+
         binding.circle.setOnClickListener {
             dialog.show()
         }
 
-
+        val imageView = dialogBinding.circleUser
         dialogBinding.btnReturn.setOnClickListener{
             Log.d("DEBUG", "btnReturn clicado!")
             dialog.dismiss()
         }
         dialogBinding.changeButton.setOnClickListener{
+            pickImageFromGallery()
             Toast.makeText(this, "LOL", Toast.LENGTH_SHORT).show()
         }
 
+    }
+
+
+    private fun pickImageFromGallery() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, IMAGE_REQUEST_CODE)
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK) {
+            dialogBinding.circleUser.setImageURI(data?.data)
+        }
     }
 
 }
