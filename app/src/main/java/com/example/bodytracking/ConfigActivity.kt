@@ -1,6 +1,7 @@
 package com.example.bodytracking
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -121,10 +122,11 @@ class ConfigActivity : AppCompatActivity() {
         dialog.window?.setBackgroundDrawable(getDrawable(R.drawable.bg_dialog_box))
 
 
-
+        loadSavedImage(binding.root.context, binding.circleUser)
         binding.circle.setOnClickListener {
             dialog.show()
-            loadSavedImage()
+            loadSavedImage(dialogBinding.root.context, dialogBinding.circleUser)
+
         }
 
         val imageView = dialogBinding.circleUser
@@ -138,17 +140,19 @@ class ConfigActivity : AppCompatActivity() {
         }
 
     }
-    private fun loadSavedImage() {
-        val sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
+
+    private fun loadSavedImage(context: Context, imageView: ImageView) {
+        val sharedPreferences = context.getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
         val imagePath = sharedPreferences.getString("profile_image_path", null)
 
         if (imagePath != null) {
             val file = File(imagePath)
             if (file.exists()) {
-                dialogBinding.circleUser.setImageURI(Uri.parse(imagePath))
+                imageView.setImageURI(Uri.parse(imagePath))
             }
         }
     }
+
 
 
 

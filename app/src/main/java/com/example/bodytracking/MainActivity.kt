@@ -1,19 +1,24 @@
 package com.example.bodytracking
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Window
 import android.view.WindowManager
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.bodytracking.ConfigActivity.Companion.loadSavedImage
 import com.example.bodytracking.databinding.ActivityMainBinding
 import com.github.mikephil.charting.charts.LineChart
+import java.io.File
 import kotlin.math.log10
 
 class MainActivity : AppCompatActivity() {
@@ -72,6 +77,7 @@ class MainActivity : AppCompatActivity() {
         lineChart = binding.lineChart
         chartConfigurator = ChartConfigurator(this)
         chartConfigurator.configureLineChart(lineChart,number)
+        loadSavedImage(binding.root.context, binding.circleUser)
 
         binding.weekButton.setOnClickListener {
             Log.d("69", "Line passed")
@@ -138,78 +144,6 @@ class MainActivity : AppCompatActivity() {
         return 0.0
     }
 
-//    fun getWeekDays(): List<String> {
-//        val calendar = Calendar.getInstance() // Get today date
-//
-//        // Date format definition (exemplo: "dd/MM/yyyy")
-//        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-//
-//        // Get first day of the week
-//        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
-//
-//        // List with all week days
-//        val weekDays = mutableListOf<String>()
-//
-//        // Put all the days into the list
-//        for (i in 0..6) {
-//            weekDays.add(dateFormat.format(calendar.time))
-//            calendar.add(Calendar.DAY_OF_MONTH, 1) // Pass for the next day
-//        }
-//        return weekDays
-//    }
-//    fun getMonthDays(): List<String> {
-//        val calendar = Calendar.getInstance() // Get today date
-//
-//        // Date format definition (exemplo: "dd/MM/yyyy")
-//        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-//
-//        // Get first day of the month
-//        calendar.set(Calendar.DAY_OF_MONTH, 1)
-//
-//        // List with all month days
-//        val monthDays = mutableListOf<String>()
-//
-//        // Get last mday of the month
-//        val daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
-//
-//        val today = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
-//
-//        // Put the days into a list
-//        for (i in 1..daysInMonth) {
-//            monthDays.add(dateFormat.format(calendar.time))
-//            if (i == today) break
-//            calendar.add(Calendar.DAY_OF_MONTH, 1) // Pass to the next day
-////            return monthDays
-//        }
-//        return monthDays
-//        //    Return all the entries
-//    }
-//    fun getYearDays(): List<String> {
-//        val calendar = Calendar.getInstance() // Get today date
-//
-//        // Date format definition (exemplo: "dd/MM/yyyy")
-//        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-//
-//        // Get first day of the year
-//        calendar.set(Calendar.DAY_OF_YEAR, 1)
-//
-//        // List with all year days
-//        val yearDays = mutableListOf<String>()
-//
-//        // Get last year day
-//        val daysInYear = calendar.getActualMaximum(Calendar.DAY_OF_YEAR)
-//
-//        val today = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
-//
-//        // Put the days into a list
-//        for (i in 1..daysInYear) {
-//            yearDays.add(dateFormat.format(calendar.time))
-//            if (i == today) break
-//            calendar.add(Calendar.DAY_OF_YEAR, 1) // Pass to the next day
-//        }
-//        return yearDays
-//        //    Return all the entries
-//    }
     fun averageWeight(number: Int): Float {
         var days = ChartConfigurator.getWeekDays()
         when(number){
@@ -238,7 +172,17 @@ class MainActivity : AppCompatActivity() {
         val removeZeros = parts.map { it.toInt().toString()}
         return removeZeros.joinToString("/")
     }
+    private fun loadSavedImage(context: Context, imageView: ImageView) {
+        val sharedPreferences = context.getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
+        val imagePath = sharedPreferences.getString("profile_image_path", null)
 
+        if (imagePath != null) {
+            val file = File(imagePath)
+            if (file.exists()) {
+                imageView.setImageURI(Uri.parse(imagePath))
+            }
+        }
+    }
 
 
 }
