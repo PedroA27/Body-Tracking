@@ -12,19 +12,19 @@ import android.util.TypedValue
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageView
+
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.viewbinding.ViewBinding
 import com.example.bodytracking.databinding.ActivityConfigBinding
 import com.example.bodytracking.databinding.CustomImageBoxBinding
 import java.io.File
 import java.io.FileOutputStream
+
 
 class ConfigActivity : AppCompatActivity() {
     private lateinit var binding: ActivityConfigBinding
@@ -36,13 +36,7 @@ class ConfigActivity : AppCompatActivity() {
 
 
     //-------------
-//    private val imagePickerLauncher =
-//        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-//            if (result.resultCode == RESULT_OK) {
-//                val data: Intent? = result.data
-//                dialogBinding.circleUser.setImageURI(data?.data)
-//            }
-//        }
+
     //-------------
     private fun saveImageToInternalStorage(imageUri: Uri): String? {
         return try {
@@ -129,7 +123,22 @@ class ConfigActivity : AppCompatActivity() {
 
         }
 
-        val imageView = dialogBinding.circleUser
+//        val composeView = binding.customSwitch
+//        composeView.setContent {
+//            CustomSwitch() // Apenas o conteúdo do Switch, sem constraints
+//        }
+
+        fun Int.dpToPx(): Int {
+            return (this * resources.displayMetrics.density).toInt()
+        }
+        val customSwitchWidth = (resources.displayMetrics.widthPixels - resources.displayMetrics.widthPixels*0.42 - 40.dpToPx()).toInt()
+        val customSwitchAdjust = binding.myCustomSwitch
+        customSwitchAdjust.trackTintList = null // Desativa o trackTint
+        customSwitchAdjust.thumbTintList = null
+        customSwitchAdjust.setSwitchMinWidth(customSwitchWidth)
+
+
+
         dialogBinding.btnReturn.setOnClickListener{
             Log.d("DEBUG", "btnReturn clicado!")
             dialog.dismiss()
@@ -153,7 +162,29 @@ class ConfigActivity : AppCompatActivity() {
         }
     }
 
-
+//    @Composable
+//    private fun CustomSwitch() {
+//        var checked by remember { mutableStateOf(true) }
+//
+//        Box(
+//            contentAlignment = Alignment.CenterStart, // Alinha o switch dentro da caixa
+//            modifier = Modifier
+//                .fillMaxWidth() // Ocupar toda a largura disponível
+//                .height(30.dp) // Altura do track
+//                .background(if (checked) Color.Green else Color.Gray, shape = RoundedCornerShape(15.dp)) // Fundo do track
+//                .padding(horizontal = 8.dp) // Espaço interno para o switch
+//        ) {
+//            Switch(
+//                checked = checked,
+//                onCheckedChange = { checked = it },
+//                colors = SwitchDefaults.colors(
+//                    uncheckedTrackColor = Color.Transparent, // Remove o track padrão
+//                    checkedTrackColor = Color.Transparent
+//                ),
+//                modifier = Modifier.scale(1.2f) // Ajusta apenas o switch sem alterar o track
+//            )
+//        }
+//    }
 
 
     private fun pickImageFromGallery() {

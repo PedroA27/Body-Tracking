@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.bodytracking.ConfigActivity.Companion.loadSavedImage
 import com.example.bodytracking.databinding.ActivityMainBinding
 import com.github.mikephil.charting.charts.LineChart
 import java.io.File
@@ -52,18 +51,18 @@ class MainActivity : AppCompatActivity() {
         // finally change the color
         window.setStatusBarColor(ContextCompat.getColor(this,R.color.actionBarColor));
 
-        binding.buttonDB.setOnClickListener {
-            val dbHelper = MeasuresDatabaseHelper(this)
-            val measures = dbHelper.measuresList()
-            dbHelper.measuresList()
-
-            if (!measures.isNullOrEmpty()) {
-                Toast.makeText(this, measures.size.toString(), Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "No measures found", Toast.LENGTH_SHORT).show()
-            }
-
-        }
+//        binding.buttonDB.setOnClickListener {
+//            val dbHelper = MeasuresDatabaseHelper(this)
+//            val measures = dbHelper.measuresList()
+//            dbHelper.measuresList()
+//
+//            if (!measures.isNullOrEmpty()) {
+//                Toast.makeText(this, measures.size.toString(), Toast.LENGTH_SHORT).show()
+//            } else {
+//                Toast.makeText(this, "No measures found", Toast.LENGTH_SHORT).show()
+//            }
+//
+//        }
         val weightView = binding.averageWeight
         var formattedWeight = String.format("%.1f", averageWeight(number)).replace('.', ',')
 
