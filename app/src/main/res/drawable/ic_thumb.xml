@@ -3,12 +3,17 @@
     <item android:state_checked="true">
         <layer-list>
             <item>
-                <shape android:shape="oval">
-                    <solid android:color="@android:color/white"/>
+                <shape android:shape="rectangle">
+                    <solid android:color="#80FFFFFF"/>
                     <stroke android:width="2dp"
-                        android:color="@color/black"/>
-                    <size android:width="35dp"
+                        android:color="@color/white"/>
+                    <size android:width="60dp"
                         android:height="35dp"/>
+                    <corners
+                        android:bottomLeftRadius="10dp"
+                        android:bottomRightRadius="50dp"
+                        android:topRightRadius="10dp"
+                        android:topLeftRadius="50dp"/>
                 </shape>
             </item>
             <item android:drawable="@drawable/male_symbol" android:gravity="center"/>
@@ -17,12 +22,17 @@
     <item android:state_checked="false">
         <layer-list>
             <item>
-                <shape android:shape="oval">
-                    <solid android:color="@android:color/white"/>
+                <shape android:shape="rectangle">
+                    <solid android:color="#80FFFFFF"/>
                     <stroke android:width="2dp"
-                        android:color="@color/black"/>
-                    <size android:width="35dp"
+                        android:color="@color/white"/>
+                    <size android:width="60dp"
                         android:height="35dp"/>
+                    <corners
+                        android:bottomLeftRadius="10dp"
+                        android:bottomRightRadius="50dp"
+                        android:topRightRadius="10dp"
+                        android:topLeftRadius="50dp"/>
                 </shape>
             </item>
             <item android:drawable="@drawable/female_symbol" android:gravity="center"/>

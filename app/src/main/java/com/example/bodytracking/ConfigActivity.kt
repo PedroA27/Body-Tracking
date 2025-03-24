@@ -1,5 +1,6 @@
 package com.example.bodytracking
 
+import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -7,10 +8,15 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.util.TypedValue
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.Window
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 
 import android.widget.Toast
@@ -24,6 +30,7 @@ import com.example.bodytracking.databinding.ActivityConfigBinding
 import com.example.bodytracking.databinding.CustomImageBoxBinding
 import java.io.File
 import java.io.FileOutputStream
+import java.util.Calendar
 
 
 class ConfigActivity : AppCompatActivity() {
@@ -75,10 +82,16 @@ class ConfigActivity : AppCompatActivity() {
         }
     //-------------
     private fun saveImagePathToPreferences(imagePath: String) {
-        val sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
         sharedPreferences.edit().putString("profile_image_path", imagePath).apply()
     }
 
+    // SWITCH
+    companion object {
+        private const val PREFS_NAME = "MyAppPrefs"
+        private const val SWITCH_STATE_KEY = "switch_state"
+    }
+    //-------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityConfigBinding.inflate(layoutInflater)
@@ -122,22 +135,58 @@ class ConfigActivity : AppCompatActivity() {
             loadSavedImage(dialogBinding.root.context, dialogBinding.circleUser)
 
         }
+        binding.insertDate.apply {
+            isFocusable = false
+            isFocusableInTouchMode = false
+            inputType = android.text.InputType.TYPE_NULL
 
-//        val composeView = binding.customSwitch
-//        composeView.setContent {
-//            CustomSwitch() // Apenas o conteúdo do Switch, sem constraints
-//        }
+            setOnClickListener {
+                hideKeyboard()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    showDatePickerDialog()
+                }, 15)
+            }
 
+            setOnTouchListener { v, event ->
+                if (event.action == android.view.MotionEvent.ACTION_UP) {
+                    v.performClick()
+                }
+                true
+            }
+        }
+
+
+        // SWITCH -----
         fun Int.dpToPx(): Int {
             return (this * resources.displayMetrics.density).toInt()
         }
         val customSwitchWidth = (resources.displayMetrics.widthPixels - resources.displayMetrics.widthPixels*0.42 - 40.dpToPx()).toInt()
         val customSwitchAdjust = binding.myCustomSwitch
-        customSwitchAdjust.trackTintList = null // Desativa o trackTint
+        val femaleText = binding.femaleText
+        val maleText = binding.maleText
+
+        //Switch Config
+        customSwitchAdjust.trackTintList = null
         customSwitchAdjust.thumbTintList = null
         customSwitchAdjust.setSwitchMinWidth(customSwitchWidth)
 
+        val sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val savedSwitchState = sharedPreferences.getBoolean(SWITCH_STATE_KEY, false)
+        customSwitchAdjust.isChecked = savedSwitchState
 
+        maleText.visibility = if (savedSwitchState) VISIBLE else GONE
+        femaleText.visibility = if (savedSwitchState) GONE else VISIBLE
+        customSwitchAdjust.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                maleText.visibility = VISIBLE
+                femaleText.visibility = GONE
+            } else {
+                maleText.visibility = GONE
+                femaleText.visibility = VISIBLE
+            }
+            sharedPreferences.edit().putBoolean(SWITCH_STATE_KEY, isChecked).apply()
+        }
+        //-------------
 
         dialogBinding.btnReturn.setOnClickListener{
             Log.d("DEBUG", "btnReturn clicado!")
@@ -151,7 +200,7 @@ class ConfigActivity : AppCompatActivity() {
     }
 
     private fun loadSavedImage(context: Context, imageView: ImageView) {
-        val sharedPreferences = context.getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
+        val sharedPreferences = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
         val imagePath = sharedPreferences.getString("profile_image_path", null)
 
         if (imagePath != null) {
@@ -162,35 +211,35 @@ class ConfigActivity : AppCompatActivity() {
         }
     }
 
-//    @Composable
-//    private fun CustomSwitch() {
-//        var checked by remember { mutableStateOf(true) }
-//
-//        Box(
-//            contentAlignment = Alignment.CenterStart, // Alinha o switch dentro da caixa
-//            modifier = Modifier
-//                .fillMaxWidth() // Ocupar toda a largura disponível
-//                .height(30.dp) // Altura do track
-//                .background(if (checked) Color.Green else Color.Gray, shape = RoundedCornerShape(15.dp)) // Fundo do track
-//                .padding(horizontal = 8.dp) // Espaço interno para o switch
-//        ) {
-//            Switch(
-//                checked = checked,
-//                onCheckedChange = { checked = it },
-//                colors = SwitchDefaults.colors(
-//                    uncheckedTrackColor = Color.Transparent, // Remove o track padrão
-//                    checkedTrackColor = Color.Transparent
-//                ),
-//                modifier = Modifier.scale(1.2f) // Ajusta apenas o switch sem alterar o track
-//            )
-//        }
-//    }
-
 
     private fun pickImageFromGallery() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
         imagePickerLauncher.launch(intent)
+    }
+    private fun showDatePickerDialog() {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+
+        val datePickerDialog = DatePickerDialog(
+            this,R.style.CustomDatePickerTheme,
+            { _, selectedYear, selectedMonth, selectedDay ->
+                val selectedDate = "$selectedDay/${selectedMonth + 1}/$selectedYear"
+                binding.insertDate.setText(selectedDate)
+            },
+            year, month, day
+        )
+
+        datePickerDialog.show()
+    }
+    private fun hideKeyboard() {
+        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        // Hide Keyboard when putting Date
+        val view = currentFocus ?: binding.root
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
 }
