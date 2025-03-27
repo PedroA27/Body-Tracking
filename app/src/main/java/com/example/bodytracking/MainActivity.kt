@@ -135,10 +135,11 @@ class MainActivity : AppCompatActivity() {
         val biggestDate = dbHelper.getBiggestDate()
 
         val appMeasures = dbHelper.findByDate(biggestDate)
-
+        val currentHeight = ConfigActivity.HEIGHT.toFloatOrNull()
+        print(currentHeight)
         if (appMeasures != null) {
 
-            return 36.76 + 86.01*log10((((appMeasures.midWaist + appMeasures.lowerWaist + appMeasures.upperWaist).toDouble())/3)/2.54 - appMeasures.neck.toDouble()/2.54) - 70.041*log10(178/2.54)
+            return 36.76 + 86.01*log10((((appMeasures.midWaist + appMeasures.lowerWaist + appMeasures.upperWaist).toDouble())/3)/2.54 - appMeasures.neck.toDouble()/2.54) - 70.041*log10(180/2.54)
         }
         return 0.0
     }

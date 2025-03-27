@@ -10,6 +10,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.util.TypedValue
 import android.view.View.GONE
@@ -90,6 +92,8 @@ class ConfigActivity : AppCompatActivity() {
     companion object {
         private const val PREFS_NAME = "MyAppPrefs"
         private const val SWITCH_STATE_KEY = "switch_state"
+        private const val BIRTHDAY = "birthday_date"
+        const val HEIGHT = "current_height"
     }
     //-------
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -187,7 +191,80 @@ class ConfigActivity : AppCompatActivity() {
             sharedPreferences.edit().putBoolean(SWITCH_STATE_KEY, isChecked).apply()
         }
         //-------------
-
+        // EDITTEXT BIRTHDAY----
+        val birthday = binding.insertDate
+        val sharedPreferences2: String? = sharedPreferences.getString(BIRTHDAY, null)
+        if (sharedPreferences2 != null && sharedPreferences2.trim().length > 0) {
+            birthday.setText(sharedPreferences2)
+        }
+        birthday.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val text = s?.toString()?.trim() ?: ""
+                sharedPreferences.edit().apply {
+                    if (text.isBlank()) {
+                        remove(BIRTHDAY) // Clear if empty to show hint
+                    } else {
+                        putString(BIRTHDAY, text)
+                    }
+                }.apply()
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+        //-------------
+        // EDITTEXT HEIGHT----
+//        val customHeight = binding.insertHeight
+//        val sharedPreferences3 = sharedPreferences.getFloat(HEIGHT, Float.NaN)
+//        if (!sharedPreferences3.isNaN()) {
+//            customHeight.setText(sharedPreferences3.toString())
+//        }else {
+//            customHeight.text.clear() // Ensures hint remains visible
+//        }
+//        customHeight.addTextChangedListener(object : TextWatcher {
+//            override fun afterTextChanged(s: Editable?) {
+//                try {
+//                    val text = s?.toString() ?: ""
+//                    if (text.isBlank()) {
+//                        // Clear saved value when empty (shows hint)
+//                        sharedPreferences.edit()
+//                            .remove(HEIGHT)
+//                            .apply()
+//                    } else {
+//                        // Save valid float value
+//                        val floatValue = text.toFloat()
+//                        sharedPreferences.edit()
+//                            .putFloat(HEIGHT, floatValue)
+//                            .apply()
+//                    }
+//                } catch (e: NumberFormatException) {
+//                    // Handle invalid number input
+//                    customHeight.error = "Please enter a valid number"
+//                }
+//            }
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+//        })
+        //-------------
+        val customHeight = binding.insertHeight
+        val sharedPreferences3: String? = sharedPreferences.getString(HEIGHT, null)
+        if (sharedPreferences3 != null && sharedPreferences3.trim().length > 0) {
+            customHeight.setText(sharedPreferences3)
+        }
+        customHeight.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val text = s?.toString()?.trim() ?: ""
+                sharedPreferences.edit().apply {
+                    if (text.isBlank()) {
+                        remove(HEIGHT) // Clear if empty to show hint
+                    } else {
+                        putString(HEIGHT, text)
+                    }
+                }.apply()
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+        //________________________
         dialogBinding.btnReturn.setOnClickListener{
             Log.d("DEBUG", "btnReturn clicado!")
             dialog.dismiss()
