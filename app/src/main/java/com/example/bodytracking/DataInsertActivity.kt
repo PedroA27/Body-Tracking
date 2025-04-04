@@ -14,10 +14,13 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Handler
 import android.os.Looper
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
+import com.example.bodytracking.ConfigActivity.Companion.PREFS_NAME
+import com.example.bodytracking.ConfigActivity.Companion.SWITCH_STATE_KEY
 
 class DataInsertActivity : AppCompatActivity() {
 
@@ -44,6 +47,22 @@ class DataInsertActivity : AppCompatActivity() {
 
         // finally change the color
         window.setStatusBarColor(ContextCompat.getColor(this,R.color.actionBarColor));
+
+
+        //-----------
+        val sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val savedSwitchState = sharedPreferences.getBoolean(SWITCH_STATE_KEY, false)
+
+        val viewsList = listOf(
+            binding.dataInsert6,
+            binding.hipsText,
+            binding.insert6Box,
+            binding.unitBox6,
+            binding.unitBoxText6,
+            binding.insertHips
+        )
+        updateViewsVisibility(viewsList, savedSwitchState)
+        //-------------
 
         binding.icReturn.setOnClickListener {
             val intent = Intent(this,MainActivity::class.java)
@@ -80,21 +99,49 @@ class DataInsertActivity : AppCompatActivity() {
             val midWaist = binding.insertMidWaist.text.toString().toFloatOrNull()
             val lowerWaist = binding.insertLowerWaist.text.toString().toFloatOrNull()
             val neck = binding.insertNeck.text.toString().toFloatOrNull()
+            val hips = binding.insertHips.text.toString().toFloatOrNull()
             val date = binding.insertDate.text.toString()
 
             val exists = MeasuresDatabaseHelper.doesDateExist(db, date)
 
             if (weight != null && upperWaist != null && midWaist != null && lowerWaist != null && neck != null && date.isNotEmpty()) {
                 if(exists){
-                    MeasuresDatabaseHelper.updateMeasure(db,upperWaist, midWaist, weight, date, neck, lowerWaist)
-                    Toast.makeText(this, "Operation Concluded", Toast.LENGTH_SHORT).show()
+                    if(savedSwitchState){
+//                        MeasuresDatabaseHelper.updateMeasure(db,0.0, 0.0, 0.0, 0.0, 0.0, 0.00, 0.0)
+                        MeasuresDatabaseHelper.updateMeasure(db,upperWaist, midWaist, weight, date, neck, lowerWaist, 0f)
+                        Toast.makeText(this, "Operation Concluded", Toast.LENGTH_SHORT).show()
+                    }
+                    else{
+                        if (hips != null){
+                            MeasuresDatabaseHelper.updateMeasure(db,upperWaist, midWaist, weight, date, neck, lowerWaist,hips)
+                            Toast.makeText(this, "Operation Concluded", Toast.LENGTH_SHORT).show()
+                        }
+                        else{
+                            Toast.makeText(this, "Please, insert all values correctly.", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+//                    Toast.makeText(this, "Operation Concluded", Toast.LENGTH_SHORT).show()
 
                 }
                 else {
-                    val appMeasures =
-                        AppMeasures(0, weight, upperWaist, midWaist, lowerWaist, neck, date)
-                    dbHelper.insertAppMeasures(appMeasures)
-                    Toast.makeText(this, "Operation Concluded", Toast.LENGTH_SHORT).show()
+
+                    if(savedSwitchState){
+                        val appMeasures = AppMeasures(0, weight, upperWaist, midWaist, lowerWaist, neck,0f, date)
+                        dbHelper.insertAppMeasures(appMeasures)
+                        Toast.makeText(this, "Operation Concluded", Toast.LENGTH_SHORT).show()
+                    }
+                    else{
+                        if (hips != null) {
+                            val appMeasures = AppMeasures(0, weight, upperWaist, midWaist, lowerWaist, neck,hips, date)
+                            dbHelper.insertAppMeasures(appMeasures)
+                            Toast.makeText(this, "Operation Concluded", Toast.LENGTH_SHORT).show()
+                        }
+                        else{
+                            Toast.makeText(this, "Please, insert all values correctly.", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+//                    Toast.makeText(this, "Operation Concluded", Toast.LENGTH_SHORT).show()
 
                 }
                 finish()// Close activity
@@ -133,5 +180,9 @@ class DataInsertActivity : AppCompatActivity() {
         // Hide Keyboard when putting Date
         val view = currentFocus ?: binding.root
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+    private fun updateViewsVisibility(imageViews: List<View>, MaleFemale: Boolean) {
+        val visibility = if (MaleFemale) View.GONE else View.VISIBLE
+        imageViews.forEach { it.visibility = visibility }
     }
 }

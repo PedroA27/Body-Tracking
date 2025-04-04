@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.bodytracking.ConfigActivity.Companion.HEIGHT
+import com.example.bodytracking.ConfigActivity.Companion.PREFS_NAME
 import com.example.bodytracking.databinding.ActivityMainBinding
 import com.github.mikephil.charting.charts.LineChart
 import java.io.File
@@ -135,11 +137,12 @@ class MainActivity : AppCompatActivity() {
         val biggestDate = dbHelper.getBiggestDate()
 
         val appMeasures = dbHelper.findByDate(biggestDate)
-        val currentHeight = ConfigActivity.HEIGHT.toFloatOrNull()
-        print(currentHeight)
-        if (appMeasures != null) {
+        val sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val currentHeight = sharedPreferences.getString(HEIGHT, null)?.toFloatOrNull()
+        println("Line 139 "+currentHeight)
+        if (appMeasures != null && currentHeight != null) {
 
-            return 36.76 + 86.01*log10((((appMeasures.midWaist + appMeasures.lowerWaist + appMeasures.upperWaist).toDouble())/3)/2.54 - appMeasures.neck.toDouble()/2.54) - 70.041*log10(180/2.54)
+            return 36.76 + 86.01*log10((((appMeasures.midWaist + appMeasures.lowerWaist + appMeasures.upperWaist).toDouble())/3)*0.393701 - appMeasures.neck.toDouble()*0.393701) - 70.041*log10(currentHeight*0.393701)
         }
         return 0.0
     }

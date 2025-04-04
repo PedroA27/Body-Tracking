@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.example.bodytracking.ConfigActivity.Companion.PREFS_NAME
+import com.example.bodytracking.ConfigActivity.Companion.SWITCH_STATE_KEY
 import java.text.SimpleDateFormat
 
 
@@ -13,7 +15,7 @@ class MeasuresDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATAB
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
     companion object{
         private const val DATABASE_NAME = "bodytracking.db"
-        private const val DATABASE_VERSION = 3
+        private const val DATABASE_VERSION = 4
         private const val TABLE_NAME = "Measures"
         private const val COLUMN_ID = "id"
         private const val COLUMN_WEIGHT= "weight"
@@ -21,12 +23,13 @@ class MeasuresDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATAB
         private const val COLUMN_MID_WAIST = "midWaist"
         private const val COLUMN_LOWER_WAIST = "lowerWaist"
         private const val COLUMN_NECK = "neck"
+        private const val COLUMN_HIPS = "hips"
         private const val COLUMN_DATE = "date"
 
 
 
 
-        fun updateMeasure(db: SQLiteDatabase, upperWaist: Float, midWaist: Float, weight: Float, date: String, neck: Float, lowerWaist: Float) {
+        fun updateMeasure(db: SQLiteDatabase, upperWaist: Float, midWaist: Float, weight: Float, date: String, neck: Float, lowerWaist: Float, hips: Float) {
             val values = ContentValues().apply {
                 put("upperWaist", upperWaist)
                 put("midWaist", midWaist)
@@ -34,6 +37,8 @@ class MeasuresDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATAB
                 put("date", date)
                 put("neck", neck)
                 put("lowerWaist", lowerWaist)
+                put("hips", hips)
+
             }
 
             // Definindo a cláusula WHERE para identificar a linha que deseja atualizar
@@ -100,7 +105,7 @@ class MeasuresDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATAB
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
-        val createTableQuery = "CREATE TABLE $TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY, $COLUMN_WEIGHT NUMERIC,$COLUMN_UPPER_WAIST NUMERIC, $COLUMN_MID_WAIST NUMERIC, $COLUMN_LOWER_WAIST NUMERIC, $COLUMN_NECK NUMERIC, $COLUMN_DATE TEXT NOT NULL UNIQUE)"
+        val createTableQuery = "CREATE TABLE $TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY, $COLUMN_WEIGHT NUMERIC,$COLUMN_UPPER_WAIST NUMERIC, $COLUMN_MID_WAIST NUMERIC, $COLUMN_LOWER_WAIST NUMERIC, $COLUMN_NECK NUMERIC, $COLUMN_HIPS NUMERIC, $COLUMN_DATE TEXT NOT NULL UNIQUE)"
         saveData("biggestDate","00/00/0000")
         db?.execSQL(createTableQuery)
     }
@@ -117,6 +122,7 @@ class MeasuresDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATAB
         val values = ContentValues().apply{
             put(COLUMN_DATE, measures.date) //Convert date to long
             put(COLUMN_NECK, measures.neck)
+            put(COLUMN_HIPS, measures.hips)
             put(COLUMN_LOWER_WAIST, measures.lowerWaist)
             put(COLUMN_MID_WAIST, measures.midWaist)
             put(COLUMN_UPPER_WAIST, measures.upperWaist)
@@ -150,6 +156,7 @@ class MeasuresDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATAB
                 midWaist = cursor.getFloat(cursor.getColumnIndexOrThrow("midWaist")),
                 lowerWaist = cursor.getFloat(cursor.getColumnIndexOrThrow("lowerWaist")),
                 neck = cursor.getFloat(cursor.getColumnIndexOrThrow("neck")),
+                hips = cursor.getFloat(cursor.getColumnIndexOrThrow("hips")),
                 date = cursor.getString(cursor.getColumnIndexOrThrow("date"))
             )
 //            db.close()
@@ -184,6 +191,7 @@ class MeasuresDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATAB
                         cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_MID_WAIST)),
                         cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_LOWER_WAIST)),
                         cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_NECK)),
+                        cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_HIPS)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DATE))
                     )
                 )

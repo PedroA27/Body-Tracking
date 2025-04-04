@@ -137,21 +137,42 @@
     </androidx.cardview.widget.CardView>
 
 
-    <TextView
+<!--    <TextView-->
+<!--        android:id="@+id/nameText"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text= "Your Name"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:fontFamily="@font/palanquin_bold"-->
+<!--        android:textSize="18sp"-->
+<!--        android:gravity="center_vertical"-->
+<!--        android:layout_marginStart="2dp"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/nameInsert"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/nameInsert"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/nameInsert"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/nameInsert"-->
+<!--        />-->
+    <EditText
         android:id="@+id/nameText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text= "Your Name"
-        android:textColor="@color/white"
-        android:fontFamily="@font/palanquin_bold"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:textSize="18sp"
-        android:gravity="center_vertical"
-        android:layout_marginStart="2dp"
-        app:layout_constraintTop_toTopOf="@+id/nameInsert"
-        app:layout_constraintStart_toStartOf="@+id/nameInsert"
-        app:layout_constraintEnd_toEndOf="@+id/nameInsert"
-        app:layout_constraintBottom_toBottomOf="@+id/nameInsert"
-        />
+        android:background="@android:color/transparent"
+        android:inputType="none"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:fontFamily="@font/palanquin_bold"
+        android:gravity="center"
+        android:hint="Your Name"
+        app:layout_constraintStart_toStartOf="@id/nameInsert"
+        app:layout_constraintEnd_toEndOf="@id/nameInsert"
+        app:layout_constraintTop_toTopOf="@id/nameInsert"
+        app:layout_constraintBottom_toBottomOf="@id/nameInsert"/>
+
 
     <TextView
         android:id="@+id/personalInfo"

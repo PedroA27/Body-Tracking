@@ -176,6 +176,19 @@
         android:layout_marginEnd="50dp"
         android:layout_marginTop="20dp"
         app:layout_constraintTop_toBottomOf="@id/dataInsert5"
+        app:layout_constraintBottom_toTopOf="@id/dataInsert7"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+        android:id="@+id/dataInsert7"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:src="@drawable/data_input"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/dataInsert6"
         app:layout_constraintBottom_toTopOf="@id/buttonPanel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -439,6 +452,7 @@
         app:layout_constraintTop_toTopOf="@id/dataInsert5"
         app:layout_constraintBottom_toBottomOf="@id/dataInsert5"/>
 
+
     <TextView
         android:id="@+id/unitBoxText5"
         android:layout_width="wrap_content"
@@ -465,6 +479,60 @@
         app:layout_constraintBottom_toBottomOf="@id/dataInsert6"/>
 
     <EditText
+        android:id="@+id/insertHips"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="5dp"
+        android:textSize="18sp"
+        android:background="@android:color/transparent"
+        android:inputType="numberDecimal"
+        android:fontFamily="@font/palanquin_medium"
+        android:gravity="center"
+        android:hint="Ex: 100cm"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintEnd_toStartOf="@id/unitBox6"
+        app:layout_constraintTop_toTopOf="@id/dataInsert6"
+        app:layout_constraintBottom_toBottomOf="@id/dataInsert6"/>
+
+    <ImageView
+        android:id="@+id/unitBox6"
+        android:layout_width="60dp"
+        android:layout_height="25dp"
+        android:src="@drawable/bg_unit"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintEnd_toEndOf="@id/dataInsert6"
+        app:layout_constraintTop_toTopOf="@id/dataInsert6"
+        app:layout_constraintBottom_toBottomOf="@id/dataInsert6"/>
+
+    <TextView
+        android:id="@+id/unitBoxText6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text= "cm"
+        android:textColor="@color/white"
+        android:fontFamily="@font/palanquin_light"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_marginBottom="3dp"
+        app:layout_constraintTop_toTopOf="@id/unitBox6"
+        app:layout_constraintStart_toStartOf="@id/unitBox6"
+        app:layout_constraintEnd_toEndOf="@id/unitBox6"
+        app:layout_constraintBottom_toBottomOf="@id/unitBox6"/>
+
+    <ImageView
+        android:id="@+id/insert7Box"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/bg_insert_data"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintEnd_toEndOf="@id/dataInsert7"
+        app:layout_constraintTop_toTopOf="@id/dataInsert7"
+        app:layout_constraintBottom_toBottomOf="@id/dataInsert7"/>
+
+    <EditText
         android:id="@+id/insertDate"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -479,9 +547,9 @@
         android:gravity="center"
         android:hint="Ex: 25/12/2010"
         app:layout_constraintStart_toStartOf="@id/guideline"
-        app:layout_constraintEnd_toEndOf="@id/dataInsert6"
-        app:layout_constraintTop_toTopOf="@id/dataInsert6"
-        app:layout_constraintBottom_toBottomOf="@id/dataInsert6"/>
+        app:layout_constraintEnd_toEndOf="@id/dataInsert7"
+        app:layout_constraintTop_toTopOf="@id/dataInsert7"
+        app:layout_constraintBottom_toBottomOf="@id/dataInsert7"/>
 
     <TextView
         android:id="@+id/weightText"
@@ -564,10 +632,10 @@
         />
 
     <TextView
-        android:id="@+id/dateText"
+        android:id="@+id/hipsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text= "Date"
+        android:text= "Hips"
         android:textColor="@color/white"
         android:fontFamily="@font/palanquin_semibold"
         android:textSize="18sp"
@@ -577,6 +645,22 @@
         app:layout_constraintStart_toStartOf="@id/dataInsert6"
         app:layout_constraintEnd_toEndOf="@id/guideline"
         app:layout_constraintBottom_toBottomOf="@id/dataInsert6"
+        />
+
+    <TextView
+        android:id="@+id/dateText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text= "Date"
+        android:textColor="@color/white"
+        android:fontFamily="@font/palanquin_semibold"
+        android:textSize="18sp"
+        android:gravity="center_vertical"
+        android:layout_marginStart="2dp"
+        app:layout_constraintTop_toTopOf="@id/dataInsert7"
+        app:layout_constraintStart_toStartOf="@id/dataInsert7"
+        app:layout_constraintEnd_toEndOf="@id/guideline"
+        app:layout_constraintBottom_toBottomOf="@id/dataInsert7"
         />
 
 
