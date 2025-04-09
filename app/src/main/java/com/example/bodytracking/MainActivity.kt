@@ -17,6 +17,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.bodytracking.ConfigActivity.Companion.HEIGHT
 import com.example.bodytracking.ConfigActivity.Companion.PREFS_NAME
+import com.example.bodytracking.ConfigActivity.Companion.SWITCH_STATE_KEY
 import com.example.bodytracking.databinding.ActivityMainBinding
 import com.github.mikephil.charting.charts.LineChart
 import java.io.File
@@ -68,9 +69,12 @@ class MainActivity : AppCompatActivity() {
         val weightView = binding.averageWeight
         var formattedWeight = String.format("%.1f", averageWeight(number)).replace('.', ',')
 
-
+        //--------
+        val sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val savedSwitchState = sharedPreferences.getBoolean(SWITCH_STATE_KEY, false)
+        //-------------
         val bfView = binding.bfView
-        val bf = String.format("%.1f", lastBodyFat()).replace('.', ',')
+        val bf = String.format("%.1f", lastBodyFat(savedSwitchState)).replace('.', ',')
         val bfResult = "$bf %"
         bfView.text = bfResult
 
@@ -131,7 +135,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun lastBodyFat(): Double{
+    fun lastBodyFat(maleFemale: Boolean): Double{
         val dbHelper = MeasuresDatabaseHelper(this)
 //        val db = dbHelper.readableDatabase
         val biggestDate = dbHelper.getBiggestDate()
@@ -140,11 +144,24 @@ class MainActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val currentHeight = sharedPreferences.getString(HEIGHT, null)?.toFloatOrNull()
         println("Line 139 "+currentHeight)
-        if (appMeasures != null && currentHeight != null) {
+        if(maleFemale) {
+            if (appMeasures != null && currentHeight != null) {
 
-            return 36.76 + 86.01*log10((((appMeasures.midWaist + appMeasures.lowerWaist + appMeasures.upperWaist).toDouble())/3)*0.393701 - appMeasures.neck.toDouble()*0.393701) - 70.041*log10(currentHeight*0.393701)
+                return 36.76 + 86.01 * log10((((appMeasures.midWaist + appMeasures.lowerWaist + appMeasures.upperWaist).toDouble()) / 3) * 0.393701 - appMeasures.neck.toDouble() * 0.393701) - 70.041 * log10(
+                    currentHeight * 0.393701
+                )
+            }
+            return 0.0
         }
-        return 0.0
+        else{
+            if (appMeasures != null && currentHeight != null) {
+
+                return 163.205 * log10((((appMeasures.midWaist + appMeasures.lowerWaist + appMeasures.upperWaist).toDouble()) / 3) * 0.393701 - appMeasures.neck.toDouble() * 0.393701 + appMeasures.hips.toDouble() * 0.393701) - 97.684 * log10(currentHeight * 0.393701  ) - 78.387
+            }
+            return 0.0
+
+        }
+//        return 0.0
     }
 
     fun averageWeight(number: Int): Float {
