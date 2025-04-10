@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.Window
 import android.view.WindowManager
@@ -18,9 +20,11 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.bodytracking.ConfigActivity.Companion.HEIGHT
 import com.example.bodytracking.ConfigActivity.Companion.PREFS_NAME
 import com.example.bodytracking.ConfigActivity.Companion.SWITCH_STATE_KEY
+import com.example.bodytracking.ConfigActivity.Companion.USER_NAME
 import com.example.bodytracking.databinding.ActivityMainBinding
 import com.github.mikephil.charting.charts.LineChart
 import java.io.File
+import java.util.Locale
 import kotlin.math.log10
 
 class MainActivity : AppCompatActivity() {
@@ -32,6 +36,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var lineChart: LineChart
     private var number: Int = 0
 
+    companion object {
+        const val WEEK_GOAL = "weekGoal"
+
+    }
 
     @SuppressLint("DefaultLocale")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,18 +62,6 @@ class MainActivity : AppCompatActivity() {
         // finally change the color
         window.setStatusBarColor(ContextCompat.getColor(this,R.color.actionBarColor));
 
-//        binding.buttonDB.setOnClickListener {
-//            val dbHelper = MeasuresDatabaseHelper(this)
-//            val measures = dbHelper.measuresList()
-//            dbHelper.measuresList()
-//
-//            if (!measures.isNullOrEmpty()) {
-//                Toast.makeText(this, measures.size.toString(), Toast.LENGTH_SHORT).show()
-//            } else {
-//                Toast.makeText(this, "No measures found", Toast.LENGTH_SHORT).show()
-//            }
-//
-//        }
         val weightView = binding.averageWeight
         var formattedWeight = String.format("%.1f", averageWeight(number)).replace('.', ',')
 
@@ -77,6 +73,31 @@ class MainActivity : AppCompatActivity() {
         val bf = String.format("%.1f", lastBodyFat(savedSwitchState)).replace('.', ',')
         val bfResult = "$bf %"
         bfView.text = bfResult
+        //________________________
+        //customName
+        val customGoal = binding.weekGoal
+
+// Load and format the saved value for display
+        val sharedPreferencesWeek: String? = sharedPreferences.getString(WEEK_GOAL, null)
+        if (sharedPreferencesWeek != null && sharedPreferencesWeek.trim().length > 0) {
+            customGoal.setText(sharedPreferencesWeek)
+        }
+        customGoal.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                var text = s?.toString()?.trim() ?: ""
+                sharedPreferences.edit().apply {
+                    if (text.isBlank()) {
+                        remove(WEEK_GOAL) // Clear if empty to show hint
+                    } else {
+                        putString(WEEK_GOAL, text)
+                    }
+                }.apply()
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
+
 
 //        lineChart = findViewById(R.id.lineChart)
         lineChart = binding.lineChart
@@ -133,6 +154,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         chartConfigurator.configureLineChart(lineChart, number)
     }
+
 
 
     fun lastBodyFat(maleFemale: Boolean): Double{

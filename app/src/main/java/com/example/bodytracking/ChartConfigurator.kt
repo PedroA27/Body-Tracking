@@ -65,15 +65,12 @@ class ChartConfigurator(private val context: Context) {
         lineChart.xAxis.spaceMax = .3f
 
         lineChart.xAxis.isGranularityEnabled = true
-//        lineChart.xAxis.isForceLabelsEnabled
-//        lineChart.xAxis.isForceLabelsEnabled()
-//        lineChart.xAxis.isGranularityEnabled = true
-//        lineChart.xAxis.setAvoidFirstLastClipping(true)
+
 
 
         lineChart.xAxis.setDrawGridLines(false)
-//        lineChart.xAxis.axisMinimum = -.2f
         lineChart.axisLeft.setDrawGridLines(false)
+        lineChart.axisRight.setDrawGridLines(false)
 
 
 
@@ -235,13 +232,7 @@ class ChartConfigurator(private val context: Context) {
 
 }
 
-//class YValueFormatter : IValueFormatter {
-////    override fun getFormattedValue(value: Float): String {
-//    fun getFormattedValue(value: Float): String {
-//        val valueFormated = value.toInt()
-//        return "$valueFormated kg" // Put Kg on the subtitles
-//    }
-//}
+
 
 class YValueFormatter : IAxisValueFormatter {
     override fun getFormattedValue(value: Float, axis: AxisBase?): String {
@@ -249,97 +240,7 @@ class YValueFormatter : IAxisValueFormatter {
     }
 }
 
-//class XValueFormatter(private val days : List<String>, private val lineChart: LineChart) : IValueFormatter() {
-//    override fun getFormattedValue(value: Float): String {
-//        var index by Delegates.notNull<Int>()
-//        println("Line 236: "+value)
-//        if (value % 1 == 0f) {
-//            index = value.toInt()
-//        }
-//        else{
-//            return ""
-//        }
-////        Get X axis mina and max
-//        val minX = lineChart.lowestVisibleX.toInt()
-//        val maxX = lineChart.highestVisibleX.toInt()
-//        println("Line 236: (min ="+minX+")")
-//        println("Line 237: (max ="+maxX+")")
-//
-//        val visibleRange = maxX - minX
-//        println("Line 240: (visibleRange ="+visibleRange+")")
-//        if (visibleRange >= 2 && visibleRange != 3) {
-//            val step = visibleRange/2
-//            val positions = listOf(minX, minX + step, maxX)
-//            if (index in positions){
-//                return days[index]
-//            }
-////        } else {
-//        } else if((visibleRange > 1 && visibleRange < 2) || visibleRange == 3){
-//            val positions = listOf(minX, maxX)
-//            if (index in positions){
-//                return days[index]
-//            }
-//        }
-//        else if (visibleRange <= 1) {
-//            // Mostra apenas o rótulo se for o exato ponto visível
-//            val positions = listOf(minX)
-//            println("Line 259: (index = "+index+")")
-//            if (index in positions){
-//                println("Line 261")
-//                return days[index]
-//            }
-//        }
-//        println("Line 265")
-//        return ""
-//
-//    }
-//}
 
-//class XValueFormatter(private val days: List<String>, private val lineChart: LineChart) : IAxisValueFormatter {
-//    override fun getFormattedValue(value: Float, axis: AxisBase?): String {
-//        var index by Delegates.notNull<Int>()
-//        println("Line 236: $value")
-//
-//        if (value % 1 == 0f) {
-//            index = value.toInt()
-//        } else {
-//            return ""
-//        }
-//
-//        // Get X axis min and max
-//        val minX = lineChart.lowestVisibleX.toInt()
-//        val maxX = lineChart.highestVisibleX.toInt()
-//        println("Line 236: (min = $minX)")
-//        println("Line 237: (max = $maxX)")
-//
-//        val visibleRange = maxX - minX
-//        println("Line 240: (visibleRange = $visibleRange)")
-//
-//        if (visibleRange >= 2 && visibleRange != 3) {
-//            val step = visibleRange / 2
-//            val positions = listOf(minX, minX + step, maxX)
-//            if (index in positions) {
-//                return days[index]
-//            }
-//        } else if ((visibleRange > 1 && visibleRange < 2) || visibleRange == 3) {
-//            val positions = listOf(minX, maxX)
-//            if (index in positions) {
-//                return days[index]
-//            }
-//        } else if (visibleRange <= 1) {
-//            // Mostra apenas o rótulo se for o exato ponto visível
-//            val positions = listOf(minX)
-//            println("Line 259: (index = $index)")
-//            if (index in positions) {
-//                println("Line 261")
-//                return days[index]
-//            }
-//        }
-//
-//        println("Line 265")
-//        return ""
-//    }
-//}
 
 class XValueFormatter(private val days: List<String>, private val lineChart: LineChart) : IAxisValueFormatter {
     override fun getFormattedValue(value: Float, axis: AxisBase?): String {
