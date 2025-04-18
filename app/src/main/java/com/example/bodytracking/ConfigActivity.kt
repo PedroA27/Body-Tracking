@@ -135,7 +135,7 @@ class ConfigActivity : AppCompatActivity() {
 
 
         loadSavedImage(binding.root.context, binding.circleUser)
-        binding.circle.setOnClickListener {
+        binding.mainCircle.setOnClickListener {
             dialog.show()
             loadSavedImage(dialogBinding.root.context, dialogBinding.circleUser)
 
