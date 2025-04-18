@@ -8,6 +8,7 @@ import com.example.bodytracking.databinding.ActivityConfigBinding
 import java.util.Calendar
 
 class CalendarConfigurator {
+    // falta implementar:
 //    fun showDatePickerDialog(context: Context, binding : ViewDataBinding) {
 //        val calendar = Calendar.getInstance()
 //        val year = calendar.get(Calendar.YEAR)
