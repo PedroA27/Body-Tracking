@@ -79,24 +79,54 @@ class MainActivity : AppCompatActivity() {
 
 // Load and format the saved value for display
         val sharedPreferencesWeek: String? = sharedPreferences.getString(WEEK_GOAL, null)
-        if (sharedPreferencesWeek != null && sharedPreferencesWeek.trim().length > 0) {
-            customGoal.setText(sharedPreferencesWeek)
+        if (!sharedPreferencesWeek.isNullOrBlank()) {
+            customGoal.setText("${sharedPreferencesWeek.trim()} kg".replace('.', ','))
         }
+        var isEditing = false
+
+        customGoal.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                // Quando o usuário clica para editar: remove o " kg"
+                val text = customGoal.text.toString()
+                if (text.endsWith(" kg")) {
+                    customGoal.setText(text.removeSuffix(" kg"))
+                    customGoal.setSelection(customGoal.text.length) // Move o cursor para o final
+                }
+            } else {
+                // Quando o usuário sai do campo: adiciona " kg"
+                val text = customGoal.text.toString().trim()
+                if (text.isNotBlank()) {
+                    if (!text.endsWith("kg")) { // Evita adicionar "kg" duas vezes
+                        val number = text.toDoubleOrNull() // <-- converte a string para número
+                        if (number != null) {
+                            val formatted = String.format("%.1f", number) // <-- agora sim formata como número
+                            customGoal.setText("$formatted kg")
+                        }
+                    }
+                }
+
+            }
+        }
+
         customGoal.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                var text = s?.toString()?.trim() ?: ""
+                if (isEditing) return
+                val text = s?.toString()?.trim()?.removeSuffix(" kg") ?: ""
                 sharedPreferences.edit().apply {
                     if (text.isBlank()) {
-                        remove(WEEK_GOAL) // Clear if empty to show hint
+                        remove(WEEK_GOAL) // Clear if empty
                     } else {
                         putString(WEEK_GOAL, text)
                     }
                 }.apply()
             }
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                isEditing = true
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                isEditing = false
+            }
         })
-
 
 
 //        lineChart = findViewById(R.id.lineChart)
