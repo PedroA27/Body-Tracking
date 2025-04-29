@@ -38,6 +38,7 @@ import java.util.Calendar
 class ConfigActivity : AppCompatActivity() {
     private lateinit var binding: ActivityConfigBinding
     private lateinit var dialogBinding: CustomImageBoxBinding
+    private lateinit var calendarConfigurator: CalendarConfigurator
     lateinit var dialog: Dialog
 
 
@@ -103,6 +104,7 @@ class ConfigActivity : AppCompatActivity() {
 
         enableEdgeToEdge()
         setContentView(binding.root)
+        calendarConfigurator = CalendarConfigurator()
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -146,9 +148,9 @@ class ConfigActivity : AppCompatActivity() {
             inputType = android.text.InputType.TYPE_NULL
 
             setOnClickListener {
-                hideKeyboard()
+                calendarConfigurator.hideKeyboard(this@ConfigActivity,binding)
                 Handler(Looper.getMainLooper()).postDelayed({
-                    showDatePickerDialog()
+                    calendarConfigurator.showDatePickerDialog(this@ConfigActivity,binding)
                 }, 15)
             }
 
@@ -285,29 +287,6 @@ class ConfigActivity : AppCompatActivity() {
         intent.type = "image/*"
         imagePickerLauncher.launch(intent)
     }
-    private fun showDatePickerDialog() {
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-
-        val datePickerDialog = DatePickerDialog(
-            this,R.style.CustomDatePickerTheme,
-            { _, selectedYear, selectedMonth, selectedDay ->
-                val selectedDate = "$selectedDay/${selectedMonth + 1}/$selectedYear"
-                binding.insertDate.setText(selectedDate)
-            },
-            year, month, day
-        )
-
-        datePickerDialog.show()
-    }
-    private fun hideKeyboard() {
-        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        // Hide Keyboard when putting Date
-        val view = currentFocus ?: binding.root
-        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-    }
 
 }

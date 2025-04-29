@@ -25,13 +25,14 @@ import com.example.bodytracking.ConfigActivity.Companion.SWITCH_STATE_KEY
 class DataInsertActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDataInsertBinding
-
+    private lateinit var calendarConfigurator: CalendarConfigurator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDataInsertBinding.inflate(layoutInflater)
         enableEdgeToEdge()
         setContentView(binding.root)
+        calendarConfigurator = CalendarConfigurator()
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -74,9 +75,9 @@ class DataInsertActivity : AppCompatActivity() {
             inputType = android.text.InputType.TYPE_NULL
 
             setOnClickListener {
-                hideKeyboard()
+                calendarConfigurator.hideKeyboard(this@DataInsertActivity,binding)
                 Handler(Looper.getMainLooper()).postDelayed({
-                    showDatePickerDialog()
+                    calendarConfigurator.showDatePickerDialog(this@DataInsertActivity,binding)
                 }, 15)
             }
 
@@ -157,30 +158,7 @@ class DataInsertActivity : AppCompatActivity() {
 
     }
 
-    private fun showDatePickerDialog() {
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-        
 
-        val datePickerDialog = DatePickerDialog(
-            this,R.style.CustomDatePickerTheme,
-            { _, selectedYear, selectedMonth, selectedDay ->
-                val selectedDate = "$selectedDay/${selectedMonth + 1}/$selectedYear"
-                binding.insertDate.setText(selectedDate)
-            },
-            year, month, day
-        )
-
-        datePickerDialog.show()
-    }
-    private fun hideKeyboard() {
-        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        // Hide Keyboard when putting Date
-        val view = currentFocus ?: binding.root
-        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-    }
     private fun updateViewsVisibility(imageViews: List<View>, MaleFemale: Boolean) {
         val visibility = if (MaleFemale) View.GONE else View.VISIBLE
         imageViews.forEach { it.visibility = visibility }
