@@ -1,6 +1,5 @@
 package com.example.bodytracking
 
-import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -18,9 +17,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.Window
 import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
-
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,8 +29,6 @@ import com.example.bodytracking.databinding.ActivityConfigBinding
 import com.example.bodytracking.databinding.CustomImageBoxBinding
 import java.io.File
 import java.io.FileOutputStream
-import java.util.Calendar
-
 
 class ConfigActivity : AppCompatActivity() {
     private lateinit var binding: ActivityConfigBinding
@@ -41,13 +36,6 @@ class ConfigActivity : AppCompatActivity() {
     private lateinit var calendarConfigurator: CalendarConfigurator
     lateinit var dialog: Dialog
 
-
-
-
-
-    //-------------
-
-    //-------------
     private fun saveImageToInternalStorage(imageUri: Uri): String? {
         return try {
             val inputStream = contentResolver.openInputStream(imageUri)
@@ -62,23 +50,23 @@ class ConfigActivity : AppCompatActivity() {
             outputStream.flush()
             outputStream.close()
 
-            file.absolutePath // Retorna o caminho da imagem salva
+            file.absolutePath
         } catch (e: Exception) {
             e.printStackTrace()
             null
         }
     }
-    //-------------
+
     private val imagePickerLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 val data: Intent? = result.data
                 val imageUri = data?.data
                 if (imageUri != null) {
-                    val imagePath = saveImageToInternalStorage(imageUri) // Salva a imagem e obtém o caminho
+                    val imagePath = saveImageToInternalStorage(imageUri)
                     if (imagePath != null) {
                         saveImagePathToPreferences(imagePath)
-                        dialogBinding.circleUser.setImageURI(Uri.parse(imagePath)) // Exibe a imagem salva
+                        dialogBinding.circleUser.setImageURI(Uri.parse(imagePath))
                     }
                 }
             }
@@ -112,13 +100,8 @@ class ConfigActivity : AppCompatActivity() {
         }
 
         val window: Window = this.getWindow()
-        // clear FLAG_TRANSLUCENT_STATUS flag:
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-        //  add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-        // finally change the color
         window.setStatusBarColor(ContextCompat.getColor(this,R.color.actionBarColor));
 
         binding.icReturn.setOnClickListener {
@@ -162,7 +145,6 @@ class ConfigActivity : AppCompatActivity() {
             }
         }
 
-
         // SWITCH -----
         fun Int.dpToPx(): Int {
             return (this * resources.displayMetrics.density).toInt()
@@ -193,7 +175,6 @@ class ConfigActivity : AppCompatActivity() {
             }
             sharedPreferences.edit().putBoolean(SWITCH_STATE_KEY, isChecked).apply()
         }
-        //-------------
         // EDITTEXT BIRTHDAY----
         val birthday = binding.insertDate
         val sharedPreferences2: String? = sharedPreferences.getString(BIRTHDAY, null)
@@ -205,7 +186,7 @@ class ConfigActivity : AppCompatActivity() {
                 val text = s?.toString()?.trim() ?: ""
                 sharedPreferences.edit().apply {
                     if (text.isBlank()) {
-                        remove(BIRTHDAY) // Clear if empty to show hint
+                        remove(BIRTHDAY)
                     } else {
                         putString(BIRTHDAY, text)
                     }
@@ -215,7 +196,6 @@ class ConfigActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
         //-------------
-
         val customHeight = binding.insertHeight
         val sharedPreferences3: String? = sharedPreferences.getString(HEIGHT, null)
         if (sharedPreferences3 != null && sharedPreferences3.trim().length > 0) {
@@ -226,7 +206,7 @@ class ConfigActivity : AppCompatActivity() {
                 val text = s?.toString()?.trim() ?: ""
                 sharedPreferences.edit().apply {
                     if (text.isBlank()) {
-                        remove(HEIGHT) // Clear if empty to show hint
+                        remove(HEIGHT)
                     } else {
                         putString(HEIGHT, text)
                     }
@@ -235,8 +215,7 @@ class ConfigActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
-        //________________________
-        //customName
+        //Custom Name________________________
         val customName = binding.nameText
         val sharedPreferences4: String? = sharedPreferences.getString(USER_NAME, null)
         if (sharedPreferences4 != null && sharedPreferences4.trim().length > 0) {
@@ -247,7 +226,7 @@ class ConfigActivity : AppCompatActivity() {
                 val text = s?.toString()?.trim() ?: ""
                 sharedPreferences.edit().apply {
                     if (text.isBlank()) {
-                        remove(USER_NAME) // Clear if empty to show hint
+                        remove(USER_NAME)
                     } else {
                         putString(USER_NAME, text)
                     }

@@ -7,11 +7,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -20,18 +18,14 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.bodytracking.ConfigActivity.Companion.HEIGHT
 import com.example.bodytracking.ConfigActivity.Companion.PREFS_NAME
 import com.example.bodytracking.ConfigActivity.Companion.SWITCH_STATE_KEY
-import com.example.bodytracking.ConfigActivity.Companion.USER_NAME
 import com.example.bodytracking.databinding.ActivityMainBinding
 import com.github.mikephil.charting.charts.LineChart
 import java.io.File
-import java.util.Locale
 import kotlin.math.log10
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-//    var sharedPreferences: SharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
-
     private lateinit var chartConfigurator: ChartConfigurator
     private lateinit var lineChart: LineChart
     private var number: Int = 0
@@ -53,13 +47,9 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         val window: Window = this.getWindow()
-        // clear FLAG_TRANSLUCENT_STATUS flag:
+
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-        //  add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-        // finally change the color
         window.setStatusBarColor(ContextCompat.getColor(this,R.color.actionBarColor));
 
         val weightView = binding.averageWeight
@@ -74,10 +64,7 @@ class MainActivity : AppCompatActivity() {
         val bfResult = "$bf %"
         bfView.text = bfResult
         //________________________
-        //customName
         val customGoal = binding.weekGoal
-
-// Load and format the saved value for display
         val sharedPreferencesWeek: String? = sharedPreferences.getString(WEEK_GOAL, null)
         if (!sharedPreferencesWeek.isNullOrBlank()) {
             customGoal.setText("${sharedPreferencesWeek.trim()} kg".replace('.', ','))
@@ -86,20 +73,18 @@ class MainActivity : AppCompatActivity() {
 
         customGoal.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
-                // Quando o usuário clica para editar: remove o " kg"
                 val text = customGoal.text.toString()
                 if (text.endsWith(" kg")) {
                     customGoal.setText(text.removeSuffix(" kg"))
-                    customGoal.setSelection(customGoal.text.length) // Move o cursor para o final
+                    customGoal.setSelection(customGoal.text.length)
                 }
             } else {
-                // Quando o usuário sai do campo: adiciona " kg"
                 val text = customGoal.text.toString().trim()
                 if (text.isNotBlank()) {
-                    if (!text.endsWith("kg")) { // Evita adicionar "kg" duas vezes
-                        val number = text.toDoubleOrNull() // <-- converte a string para número
+                    if (!text.endsWith("kg")) {
+                        val number = text.toDoubleOrNull()
                         if (number != null) {
-                            val formatted = String.format("%.1f", number) // <-- agora sim formata como número
+                            val formatted = String.format("%.1f", number)
                             customGoal.setText("$formatted kg")
                         }
                     }
@@ -114,7 +99,7 @@ class MainActivity : AppCompatActivity() {
                 val text = s?.toString()?.trim()?.removeSuffix(" kg") ?: ""
                 sharedPreferences.edit().apply {
                     if (text.isBlank()) {
-                        remove(WEEK_GOAL) // Clear if empty
+                        remove(WEEK_GOAL)
                     } else {
                         putString(WEEK_GOAL, text)
                     }
@@ -128,34 +113,26 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-
-//        lineChart = findViewById(R.id.lineChart)
         lineChart = binding.lineChart
         chartConfigurator = ChartConfigurator(this)
         chartConfigurator.configureLineChart(lineChart,number)
         loadSavedImage(binding.root.context, binding.circleUser)
 
         binding.weekButton.setOnClickListener {
-            Log.d("69", "Line passed")
             number = 0
             chartConfigurator.configureLineChart(lineChart,number)
             formattedWeight = String.format("%.1f", averageWeight(number)).replace('.', ',')
             val weightResult = "$formattedWeight kg"
             weightView.text = weightResult
-            println("Line 75")
-
         }
         binding.monthButton.setOnClickListener {
-            println("Line 77")
             number = 1
             chartConfigurator.configureLineChart(lineChart,number)
             formattedWeight = String.format("%.1f", averageWeight(number)).replace('.', ',')
             val weightResult = "$formattedWeight kg"
             weightView.text = weightResult
-            println("Line 84")
         }
         binding.yearButton.setOnClickListener {
-            println("Line 86")
             number = 2
             chartConfigurator.configureLineChart(lineChart,number)
             formattedWeight = String.format("%.1f", averageWeight(number)).replace('.', ',')
@@ -179,7 +156,6 @@ class MainActivity : AppCompatActivity() {
 
 
     }
-    // Is it breaking the app?
     override fun onResume() {
         super.onResume()
         chartConfigurator.configureLineChart(lineChart, number)
@@ -189,13 +165,10 @@ class MainActivity : AppCompatActivity() {
 
     fun lastBodyFat(maleFemale: Boolean): Double{
         val dbHelper = MeasuresDatabaseHelper(this)
-//        val db = dbHelper.readableDatabase
         val biggestDate = dbHelper.getBiggestDate()
-
         val appMeasures = dbHelper.findByDate(biggestDate)
         val sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val currentHeight = sharedPreferences.getString(HEIGHT, null)?.toFloatOrNull()
-        println("Line 139 "+currentHeight)
         if(maleFemale) {
             if (appMeasures != null && currentHeight != null) {
 
@@ -213,7 +186,6 @@ class MainActivity : AppCompatActivity() {
             return 0.0
 
         }
-//        return 0.0
     }
 
     fun averageWeight(number: Int): Float {

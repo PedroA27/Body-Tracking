@@ -5,11 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.example.bodytracking.ConfigActivity.Companion.PREFS_NAME
-import com.example.bodytracking.ConfigActivity.Companion.SWITCH_STATE_KEY
 import java.text.SimpleDateFormat
-
-
 
 class MeasuresDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
@@ -26,9 +22,6 @@ class MeasuresDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATAB
         private const val COLUMN_HIPS = "hips"
         private const val COLUMN_DATE = "date"
 
-
-
-
         fun updateMeasure(db: SQLiteDatabase, upperWaist: Float, midWaist: Float, weight: Float, date: String, neck: Float, lowerWaist: Float, hips: Float) {
             val values = ContentValues().apply {
                 put("upperWaist", upperWaist)
@@ -41,19 +34,15 @@ class MeasuresDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATAB
 
             }
 
-            // Definindo a cláusula WHERE para identificar a linha que deseja atualizar
             val selection = "date = ?"
             val selectionArgs = arrayOf(date.toString())
-
-            // Atualizando a linha no banco de dados
             val count = db.update(
-                "Measures",   // Nome da tabela
-                values,       // Valores a serem atualizados
-                selection,    // Cláusula WHERE
-                selectionArgs // Argumentos para a cláusula WHERE
+                "Measures",
+                values,
+                selection,
+                selectionArgs
             )
 
-            // Você pode verificar se a atualização foi bem-sucedida com a variável "count"
             if (count > 0) {
                 println("Linha atualizada com sucesso.")
             } else {
@@ -62,13 +51,8 @@ class MeasuresDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATAB
         }
 
         fun doesDateExist(db: SQLiteDatabase, date: String): Boolean {
-            // Define a cláusula WHERE para procurar a data
             val selection = "date = ?"
-
-            // Define o argumento que será usado na cláusula WHERE
             val selectionArgs = arrayOf(date)
-
-            // Realiza a consulta na tabela
             val cursor = db.query(
                 "Measures",        // Nome da tabela
                 arrayOf("date"),   // Colunas a serem retornadas
@@ -79,29 +63,27 @@ class MeasuresDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATAB
                 null               // Order By
             )
 
-            // Verifica se há algum resultado (se o cursor moveu para a primeira linha)
             val exists = cursor.moveToFirst()
-
-            // Fecha o cursor para liberar recursos
             cursor.close()
 
-            // Retorna true se a data foi encontrada, false caso contrário
             return exists
         }
-
     }
+
     fun biggestDate(date1: String, date2: String): String{
         val dateFormat = SimpleDateFormat("dd/MM/yyyy")
         val laterDate = if (dateFormat.parse(date1).after(dateFormat.parse(date2))) date1 else date2
         return laterDate
     }
+
     fun saveData(key: String, value: String) {
         val editor = sharedPreferences.edit()
         editor.putString(key, value)
         editor.apply()
     }
+
     fun getBiggestDate() : String{
-        return sharedPreferences.getString("biggestDate", "00/00/0000") ?: "00/00/0000" // '?' used to make sure null returns dont exist
+        return sharedPreferences.getString("biggestDate", "00/00/0000") ?: "00/00/0000"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -110,17 +92,16 @@ class MeasuresDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATAB
         db?.execSQL(createTableQuery)
     }
 
-
-
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         val dropTableQuery = "DROP TABLE IF EXISTS $TABLE_NAME"
         db?.execSQL(dropTableQuery)
         onCreate(db)
     }
+
     fun insertAppMeasures(measures: AppMeasures) {
         val db = writableDatabase
         val values = ContentValues().apply{
-            put(COLUMN_DATE, measures.date) //Convert date to long
+            put(COLUMN_DATE, measures.date)
             put(COLUMN_NECK, measures.neck)
             put(COLUMN_HIPS, measures.hips)
             put(COLUMN_LOWER_WAIST, measures.lowerWaist)
@@ -137,18 +118,16 @@ class MeasuresDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATAB
     fun findByDate(date : String) : AppMeasures?{
         val db = readableDatabase
         val cursor = db.query(
-            "Measures",            // Nome da tabela
-            null,                 // Colunas a retornar (null para todas)
-            "date = ?",           // Cláusula WHERE
-            arrayOf(date),        // Argumentos para o WHERE
-            null,                 // groupBy
-            null,                 // having
-            null                  // orderBy
+            "Measures",
+            null,
+            "date = ?",
+            arrayOf(date),
+            null,
+            null,
+            null
         )
 
-        // Verifica se encontrou algum resultado
         if (cursor != null && cursor.moveToFirst()) {
-            // Extrai os valores e cria o data class
             val measure = AppMeasures(
                 id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
                 weight = cursor.getFloat(cursor.getColumnIndexOrThrow("weight")),
@@ -159,11 +138,9 @@ class MeasuresDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATAB
                 hips = cursor.getFloat(cursor.getColumnIndexOrThrow("hips")),
                 date = cursor.getString(cursor.getColumnIndexOrThrow("date"))
             )
-//            db.close()
             cursor.close()
             return measure
         }
-//        db.close()
         cursor?.close()
         return null
     }

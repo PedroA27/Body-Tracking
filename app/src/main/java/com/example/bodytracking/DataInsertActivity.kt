@@ -8,16 +8,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.bodytracking.databinding.ActivityDataInsertBinding
-import java.util.Calendar
-import android.app.DatePickerDialog
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import com.example.bodytracking.ConfigActivity.Companion.PREFS_NAME
 import com.example.bodytracking.ConfigActivity.Companion.SWITCH_STATE_KEY
@@ -40,20 +36,13 @@ class DataInsertActivity : AppCompatActivity() {
         }
 
         val window: Window = this.getWindow()
-        // clear FLAG_TRANSLUCENT_STATUS flag:
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-        //  add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-        // finally change the color
         window.setStatusBarColor(ContextCompat.getColor(this,R.color.actionBarColor));
-
 
         //-----------
         val sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val savedSwitchState = sharedPreferences.getBoolean(SWITCH_STATE_KEY, false)
-
         val viewsList = listOf(
             binding.dataInsert6,
             binding.hipsText,
@@ -64,7 +53,6 @@ class DataInsertActivity : AppCompatActivity() {
         )
         updateViewsVisibility(viewsList, savedSwitchState)
         //-------------
-
         binding.icReturn.setOnClickListener {
             val intent = Intent(this,MainActivity::class.java)
             startActivity(intent)
@@ -89,9 +77,6 @@ class DataInsertActivity : AppCompatActivity() {
             }
         }
 
-
-
-
         binding.buttonPanel.setOnClickListener{
             val dbHelper = MeasuresDatabaseHelper(this)
             val db = dbHelper.readableDatabase
@@ -102,13 +87,11 @@ class DataInsertActivity : AppCompatActivity() {
             val neck = binding.insertNeck.text.toString().toFloatOrNull()
             val hips = binding.insertHips.text.toString().toFloatOrNull()
             val date = binding.insertDate.text.toString()
-
             val exists = MeasuresDatabaseHelper.doesDateExist(db, date)
 
             if (weight != null && upperWaist != null && midWaist != null && lowerWaist != null && neck != null && date.isNotEmpty()) {
                 if(exists){
                     if(savedSwitchState){
-//                        MeasuresDatabaseHelper.updateMeasure(db,0.0, 0.0, 0.0, 0.0, 0.0, 0.00, 0.0)
                         MeasuresDatabaseHelper.updateMeasure(db,upperWaist, midWaist, weight, date, neck, lowerWaist, 0f)
                         Toast.makeText(this, "Operation Concluded", Toast.LENGTH_SHORT).show()
                     }
@@ -121,11 +104,8 @@ class DataInsertActivity : AppCompatActivity() {
                             Toast.makeText(this, "Please, insert all values correctly.", Toast.LENGTH_SHORT).show()
                         }
                     }
-//                    Toast.makeText(this, "Operation Concluded", Toast.LENGTH_SHORT).show()
-
                 }
                 else {
-
                     if(savedSwitchState){
                         val appMeasures = AppMeasures(0, weight, upperWaist, midWaist, lowerWaist, neck,0f, date)
                         dbHelper.insertAppMeasures(appMeasures)
@@ -141,23 +121,14 @@ class DataInsertActivity : AppCompatActivity() {
                             Toast.makeText(this, "Please, insert all values correctly.", Toast.LENGTH_SHORT).show()
                         }
                     }
-
-//                    Toast.makeText(this, "Operation Concluded", Toast.LENGTH_SHORT).show()
-
                 }
-                finish()// Close activity
+                finish()
             }
             else{
                 Toast.makeText(this, "Please, insert all values correctly.", Toast.LENGTH_SHORT).show()
             }
-
         }
-
-
-
-
     }
-
 
     private fun updateViewsVisibility(imageViews: List<View>, MaleFemale: Boolean) {
         val visibility = if (MaleFemale) View.GONE else View.VISIBLE

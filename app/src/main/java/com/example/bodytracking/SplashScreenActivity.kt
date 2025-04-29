@@ -9,9 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-
 import com.example.bodytracking.databinding.ActivitySplashScreenBinding
-
 
 class SplashScreenActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySplashScreenBinding
@@ -34,7 +32,7 @@ class SplashScreenActivity : AppCompatActivity() {
 
         Handler(Looper.getMainLooper()).postDelayed({
             startActivity(Intent(this, MainActivity::class.java))
-            finish() // Finaliza a activity atual
+            finish()
         }, 1800)
     }
 }

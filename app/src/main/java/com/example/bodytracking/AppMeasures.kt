@@ -1,7 +1,5 @@
 package com.example.bodytracking
 
-
-
 data class AppMeasures(val id: Int,
                        val weight: Float,
                        val upperWaist: Float,
